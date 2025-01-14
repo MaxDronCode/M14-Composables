@@ -1,17 +1,27 @@
+<script setup>
+import LoadData from '../composables/LoadData.js'
+import { ref, watchEffect } from 'vue'
+
+const props = defineProps({
+  id: String,
+})
+const refId = ref(props.id)
+const { posts, userId, getAllPosts } = LoadData(refId.value)
+getAllPosts()
+setTimeout(() => {
+  console.log("Desde el post: ", userId.value)
+}, 2000)
+
+const user = {
+  name: 'Leanne Graham',
+}
+</script>
+
 <template>
-  <div v-if="post && user">
-    <h1 class="text-3xl">{{ post.title }}</h1>
+  <div v-if="posts && user">
+    <h1 class="text-3xl">{{ posts.title }}</h1>
     <div class="text-gray-500 mb-10">by {{ user.name }}</div>
-    <div>{{ post.body }}</div>
+    <div>{{ posts.body }}</div>
+    <div>Posts.userId : {{ posts.userId }}</div>
   </div>
 </template>
-<script setup>
-const post = {
-  title:
-    "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-  body: "quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto",
-};
-const user = {
-  name: "Leanne Graham",
-};
-</script>
