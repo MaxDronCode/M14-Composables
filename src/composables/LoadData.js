@@ -1,15 +1,21 @@
 import { ref } from 'vue'
-export default function loadData(id = "") {
-  const posts = ref([])
-  const url = ref(`https://jsonplaceholder.typicode.com/posts/${id}`)
-  const userId = ref("")
+export default function loadData(postId = "") {
+  const posts = ref(null)
+  const BASE_URL = "https://jsonplaceholder.typicode.com"
+  const urlPosts = ref(`${BASE_URL}/posts/${postId}`)
+  const urlUsers = ref(`${BASE_URL}/users/`)
 
   const getAllPosts = async() => {
-    const res = fetch(url.value)
-    .then((res) => res.json())
-    .then((json) => (posts.value = json, userId.value = posts.value.userId))
-    console.log("Desde loadData user id: ", userId.value) 
+    const res = await fetch(urlPosts.value)
+    const data = await res.json()
+    posts.value = data
   }
 
-  return { posts, userId, getAllPosts }
+  const getUserName = async(userId) => {
+    const res = await fetch(`${urlUsers.value}${userId}`)
+    const data = await res.json()
+    return data.name
+  }
+
+  return { posts, getAllPosts, getUserName }
 }
